@@ -7,7 +7,7 @@ public class Cell extends JComponent {
 
   int x,y;
   Color c;
-  int size = 10;
+  public static int size = 10;
 
   public Cell(int x, int y, int c){
     this.x = x;
@@ -30,6 +30,12 @@ public class Cell extends JComponent {
   public void setCol(int c){
     this.c = intToCol(c);
     repaint();
+  }
+
+  public void setPos(int x, int y){
+    this.x = x;
+    this.y = y;
+    setPos(x, y);
   }
 
   public Color intToCol(int c){
