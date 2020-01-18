@@ -9,7 +9,6 @@ public class Walker{
   public static final double spawnThreshold = 0.15;
   public static final double directionThreshold = 0.2;
   public static final double deathThreshold = 0.1;
-  public static final double finalThreshold = 0.25;
 
   public Walker(int x, int y, int d){
     this.x = x;
@@ -38,9 +37,9 @@ public class Walker{
     }
     if(!active){
       System.out.println("dead");
-    } else if(x+dx>DrunkenStumble.size.getWidth()||x+dx<0){
+    } else if(x+dx>DrunkenStumble.size.getWidth()-3||x+dx<2){
       kill();
-    } else if(y+dy>DrunkenStumble.size.getHeight()||y+dy<0){
+    } else if(y+dy>DrunkenStumble.size.getHeight()-3||y+dy<2){
       kill();
     } else {
       x += dx;

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Cell extends JComponent {
 
@@ -14,6 +15,15 @@ public class Cell extends JComponent {
     this.y = y;
     this.c = intToCol(c);
     setBounds(x, y, size, size);
+
+    addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent me) {
+        printDets();
+        if(getCol().equals(Color.DARK_GRAY)){
+          System.out.println("Clear");
+        }
+      }
+    });
   }
 
   public void printDets(){
@@ -30,6 +40,10 @@ public class Cell extends JComponent {
   public void setCol(int c){
     this.c = intToCol(c);
     repaint();
+  }
+
+  public Color getCol(){
+    return this.c;
   }
 
   public void setPos(int x, int y){
@@ -75,6 +89,8 @@ public class Cell extends JComponent {
 
     }
   }
+
+
 
   // public void paint(Graphics g) {
   //   Graphics2D g2 = (Graphics2D) g;

@@ -35,24 +35,10 @@ public class DrunkenStumble {
     initMap();
     addCells();
     spawnWalkers();
-    for(int i = 0; i<100; i++){
-      for(int j = 0; j<walkerList.size(); j++){
-        Walker w = walkerList.get(j);
-        w.walk();
-        if(w.getX() >= 0 && w.getX() < 60 && w.getY() >= 0 && w.getY() < 60){
-          cellList[w.getX()][w.getY()].setCol(4);
-          counter++;
-        }
-      }
-      if(counter > 400){
-        break;
-      }
-      try{
-        Thread.sleep(100);
-      } catch(Exception e){
-
-      }
-    }
+    walkWalkers();
+    generateWalls();
+    removeSingles();
+    frame.repaint();
   }
 
   public void initMap(){
@@ -62,7 +48,7 @@ public class DrunkenStumble {
     cellList = new Cell[cellGridHeight][cellGridWidth];
     for(int i = 0; i<cellGridHeight; i++){
       for(int j = 0; j<cellGridWidth; j++){
-        cellList[i][j] = new Cell(i*Cell.size, j*Cell.size, 0);
+        cellList[i][j] = new Cell(i*Cell.size, j*Cell.size, 6);
         count++;
       }
     }
@@ -79,9 +65,78 @@ public class DrunkenStumble {
   }
 
   public void spawnWalkers(){
+    int tx = (int)(Math.random()*20)+20;
+    int ty = (int)(Math.random()*20)+20;
     for(int i = 0; i<(int)(Math.random()*4)+1; i++){
-      Walker w = new Walker((int)(Math.random()*20)+20,(int)(Math.random()*20)+20,(int)(Math.random()*4));
+      Walker w = new Walker(tx,ty,(int)(Math.random()*4));
       walkerList.add(w);
+    }
+  }
+
+  public void walkWalkers(){
+    while(true){
+      for(int j = 0; j<walkerList.size(); j++){
+        Walker w = walkerList.get(j);
+        w.walk();
+        if(w.getX() >= 0 && w.getX() < 60 && w.getY() >= 0 && w.getY() < 60){
+          cellList[w.getX()][w.getY()].setCol(1);
+          counter++;
+        }
+      }
+      if(counter > 400){
+        break;
+      }
+      try{
+        Thread.sleep(100);
+      } catch(Exception e){
+
+      }
+
+    }
+  }
+
+  public void removeSingles(){
+    for(int i = 0; i<cellList.length; i++){
+      for(int j = 0; j<cellList[i].length; j++){
+        if(cellList[i][j].getCol().equals(Color.BLACK)){
+          int count = 0;
+          for(int k = -1; k <= 1; k++){
+            for(int l = -1; l <= 1; l++){
+              if(cellList[i+k][j+l].getCol().equals(Color.WHITE)){
+                count++;
+              }
+            }
+          }
+          if(count==8){
+            cellList[i][j].setCol(1);
+          }
+        }
+      }
+    }
+  }
+
+  public void generateWalls(){
+    for(int i = 0; i<cellList.length; i++){
+      for(int j = 0; j<cellList[i].length; j++){
+        if(i==0 || j==0 || i==cellList.length-1 || j==cellList[i].length-1){
+
+        } else {
+          if(cellList[i][j].getCol().equals(Color.WHITE)){
+            for(int k = -1; k <= 1; k++){
+              for(int l = -1; l <= 1; l++){
+                if(cellList[i+k][j+l].getCol().equals(Color.DARK_GRAY)){
+                  try{
+                    Thread.sleep(10);
+                  } catch(Exception e){
+
+                  }
+                  cellList[i+k][j+l].setCol(0);
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
